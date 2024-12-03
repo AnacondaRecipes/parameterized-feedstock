@@ -1,32 +1,35 @@
 {% set name = "parameterized" %}
-{% set version = "0.8.1" %}
-{% set sha256 = "41bbff37d6186430f77f900d777e5bb6a24928a1c46fb1de692f8b52b8833b5c" %}
+{% set version = "0.9.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 7fc905272cefa4f364c1a3429cbbe9c0f98b793988efb5bf90aac80f08db09b1
 
 build:
-  noarch: python
-  number: 1
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  number: 0
+  skip: true  # [py<37]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   host:
     - python
-    - setuptools
     - pip
+    - setuptools
+    - wheel
   run:
     - python
 
 test:
   imports:
     - parameterized
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/wolever/parameterized
@@ -39,6 +42,7 @@ about:
     parameterized fixes that. For everything. Parameterized testing for nose,
     parameterized testing for py.test, parameterized testing for unittest.
   dev_url: https://github.com/wolever/parameterized
+  doc_url: https://github.com/wolever/parameterized
 
 extra:
   recipe-maintainers:
